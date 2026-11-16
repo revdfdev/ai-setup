@@ -47,13 +47,14 @@ run cp "$REPO/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 sync_skills "$HOME/.claude/skills"
 install_hook "$HOME/.claude/hooks" "$REPO/claude/settings.json" "$HOME/.claude/settings.json" merge
 
-# Antigravity (profile 1 and 2). Profile 2's skills folder links to profile 1's.
+# Antigravity (profile 1 and 2). Global skills load from ~/.gemini/config/skills
+# (Antigravity's builtin agy-customizations guide; confirmed in its session logs).
 for home in "$HOME" "$HOME/.antigravity-profile-2"; do
   [ -d "$home/.gemini" ] || continue
   run cp "$REPO/AGENTS.md" "$home/.gemini/GEMINI.md"
   install_hook "$home/.gemini/hooks" "$REPO/antigravity/hooks.json" "$home/.gemini/config/hooks.json" replace
+  sync_skills "$home/.gemini/config/skills"
 done
-sync_skills "$HOME/.gemini/antigravity/skills"
 
 # Command-line helpers (e.g. handoff-facts) into ~/.local/bin
 run mkdir -p "$HOME/.local/bin" "$HOME/.local/share/ai-setup/handoffs"

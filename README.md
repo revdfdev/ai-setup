@@ -6,7 +6,7 @@ Global rules, skills and the shell guard hook for Claude Code and Antigravity
 | Path | Goes to |
 |---|---|
 | `AGENTS.md` | `~/.claude/CLAUDE.md`, `~/.gemini/GEMINI.md`, `~/.antigravity-profile-2/.gemini/GEMINI.md` |
-| `skills/` | `~/.claude/skills`, `~/.gemini/antigravity/skills` (profile 2 links to it) |
+| `skills/` | `~/.claude/skills`, each Antigravity profile's `.gemini/config/skills` |
 | `hooks/*.py` (guard, proof gate) | `~/.claude/hooks`, `~/.gemini/hooks`, profile 2's `.gemini/hooks` |
 | `bin/*` (`workspace`, `handoff-facts`) | `~/.local/bin` |
 | `claude/settings.json` | merged into `~/.claude/settings.json` (these keys win, others kept) |
