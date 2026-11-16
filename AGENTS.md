@@ -20,6 +20,7 @@ Done = the behavior works, shown by a named command and its result; else "not ve
 - "Stop" holds until lifted. Same approach fails twice: stop and report evidence; never loop or work around a rule.
 - Investigate on your own; don't stop after each file.
 - Before reporting, re-read the request and your claims; remove anything unverified.
+- A verified decision or trap the code can't show: record it with `dotagents-adr new "<decision>"` in the owning repo, run `dotagents-adr index`, and link it from that repo's `AGENTS.md` if not yet linked. Never record status, logs or plans.
 
 ## Scope
 - Only what was asked: no cleanup, audits or speculative fixes; mention adjacent issues only if blocking. Fix a shared cause once, centrally.
