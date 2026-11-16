@@ -27,7 +27,7 @@ sync_skills() { # $1 = skills dir
 
 install_hook() { # $1 = hooks dir, $2 = template, $3 = target json, $4 = merge|replace
   run mkdir -p "$1"
-  run cp "$REPO/hooks/guard-bash.py" "$1/guard-bash.py"
+  for h in "$REPO"/hooks/*.py; do run cp "$h" "$1/$(basename "$h")"; done
   [ $DRY = 1 ] && { echo "would: write $3 from $2"; return; }
   python3 - "$2" "$3" "$1" "$4" <<'PY'
 import json, os, sys

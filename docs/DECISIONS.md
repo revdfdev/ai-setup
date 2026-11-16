@@ -1,5 +1,6 @@
 # Decisions
 
+- 2026-11-16: Anti-hallucination by hooks, not prose (no token cost unless they fire): `proof-gate` back (Stop: edited code needs a check after the last edit, or "not verified"), `dotagents-lint --hook` after Edit/Write of agent docs. Global rules halved to ~440 tokens.
 - 2026-11-16: From `~/ai-config/skills`: `FIX_BUG` replaced `bug-triage` (confidence labels, five-line report), `TDD` replaced `tdd`, `PERFOMANCE` trimmed to `performance` (~2,200 → ~500 tokens). `PLAN` was identical, `AGENT_MEMORY` is replaced by dotagents ADRs, `SIMPLIFY` duplicates Claude's `/simplify`. Attendance policy analysis moved to `hrms-attendance`.
 - 2026-11-16: Memory lives in Git, not in the tools: project facts are ADRs in the owning repo (`dotagents-adr`), habits are lines in `AGENTS.md`. Claude auto-memory off (`autoMemoryEnabled: false`) so there is one source. Loop is Scope, Explanation (with evidence), Review, Solution, Proceed for bigger changes; live code ranks above an approved plan.
 - 2026-11-16: Rebuilt from a rule-by-rule review of `ai-config-ccg`. Codex dropped (uninstalled).

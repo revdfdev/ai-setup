@@ -30,6 +30,29 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 -I \"@HOOKS@/proof-gate.py\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -x \"$HOME/.local/bin/dotagents-lint\" ] || \"$HOME/.local/bin/dotagents-lint\" --hook",
+            "timeout": 30
+          }
+        ]
+      }
     ]
   },
   "autoMemoryEnabled": false

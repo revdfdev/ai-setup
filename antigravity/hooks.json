@@ -4,8 +4,21 @@
       {
         "matcher": "run_command",
         "hooks": [
-          { "type": "command", "command": "/usr/bin/python3 -I \"@HOOKS@/guard-bash.py\"", "timeout": 10 }
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 -I \"@HOOKS@/guard-bash.py\"",
+            "timeout": 10
+          }
         ]
+      }
+    ]
+  },
+  "ai-setup-proof-gate": {
+    "Stop": [
+      {
+        "type": "command",
+        "command": "/usr/bin/python3 -I \"@HOOKS@/proof-gate.py\"",
+        "timeout": 15
       }
     ]
   }
