@@ -1,5 +1,6 @@
 # Decisions
 
+- 2026-11-16: Memory lives in Git, not in the tools: project facts are ADRs in the owning repo (`dotagents-adr`), habits are lines in `AGENTS.md`. Claude auto-memory off (`autoMemoryEnabled: false`) so there is one source. Loop is Scope, Explanation (with evidence), Review, Solution, Proceed for bigger changes; live code ranks above an approved plan.
 - 2026-11-16: Rebuilt from a rule-by-rule review of `ai-config-ccg`. Codex dropped (uninstalled).
 - 2026-11-16: Sync copies instead of linking, so the tools keep working if this repo moves or is deleted.
 - 2026-11-16: Only the `guard-bash` hook kept. `prompt-reminder` cost tokens on every prompt and repeated the rules; `proof-gate` forced extra turns; `quality-gate` ran up to 600 s per stop.
