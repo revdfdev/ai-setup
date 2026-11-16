@@ -1,22 +1,78 @@
 # Global Rules
 
-Authority: user's latest instruction > live code > approved plan > repo `AGENTS.md` > chat. Memory never authorizes work.
+From forrestchang/andrej-karpathy-skills (2c60614), then the user's own rules.
 
-## Work
-- Small fix: one-line scope, do it, prove it. Bigger or risky change: **Scope** (in/out, from the code) → **Explanation** (each claim cites `file:line` or output; label guesses) → **Review** (risks, callers of any shared contract, every path that writes the data, open decisions) → **Solution** (steps, each with its proof) → wait for `proceed`. Re-check the code before each step; if it disagrees with the plan, stop and report.
-- Can't inspect it: say so, never guess. A suspected cause is not a fact until a check proves it.
-- Only what was asked; no cleanup or speculative fixes. A named mechanism (endpoint, library, field, file) is a requirement. Copy how the app already does it; say so when an idea doesn't fit.
-- Done = a named command and its result; else "not verified". Frontend isn't done until E2E ran. Before reporting, remove anything unverified.
-- Same approach fails twice: stop and report. "Stop" holds until lifted.
+Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
 
-## Tests
-List scenarios first (boundaries, roles, state changes, double-submit, refresh). Backend: TDD, seen failing first. Never change an expected value or data to make a test pass.
+**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
-## Safety
-- Never touch uncommitted files you didn't change. Look before deleting.
-- Persisted data: dry-run, show diff, wait for "apply"; name the environment queried.
-- Push only when the whole feature is done. Never commit credentials.
+## 1. Think Before Coding
+
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
+
+Before implementing:
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them - don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+
+## 2. Simplicity First
+
+**Minimum code that solves the problem. Nothing speculative.**
+
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+
+## 3. Surgical Changes
+
+**Touch only what you must. Clean up only your own mess.**
+
+When editing existing code:
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it - don't delete it.
+
+When your changes create orphans:
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
+
+The test: Every changed line should trace directly to the user's request.
+
+## 4. Goal-Driven Execution
+
+**Define success criteria. Loop until verified.**
+
+Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+
+For multi-step tasks, state a brief plan:
+```
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
+```
+
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+
+---
+
+**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+
+## 5. This user's rules
+
+- Live code beats an approved plan: re-check the code before each step; if they disagree, stop and report.
+- Done = a named command and its result; otherwise say "not verified". A suspected cause is not a fact until a check proves it.
+- Persisted data: dry-run, show the diff, wait for "apply", per environment; name the environment queried.
+- Never touch uncommitted files you didn't change; other agents work in the same repos.
+- Commit locally per slice; push only when the whole feature is done and the user approves. Never commit credentials.
 - A verified decision the code can't show: `dotagents-adr new "<decision>"` in the owning repo, then `dotagents-adr index`. Never record status or logs.
-
-## Style
-Plain and short, answer first; detail in files, not chat. Use the backend's exact literals.
+- A feature needing design decisions: suggest the user runs `/egm:egm-brainstorm` (then `egm-draft`, `egm-review`). Never start EGM yourself; it runs only when the user calls it.
+- Plain, short replies; answer first.
