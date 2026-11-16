@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# Clone, pull and check only the active HRMS repos listed in hrms-shared/WORKSPACE-REPOS.txt.
+# Usage: workspace setup | pull | status
+# Env: WORKSPACE (default ~/code/hrms-project), MANIFEST_REPO (clone URL of hrms-shared).
+set -uo pipefail
+WS="${WORKSPACE:-$HOME/code/hrms-project}"
+MANIFEST_REPO="${MANIFEST_REPO:-git@github.com:Meizo-Infotech-Pvt-Ltd/hrms-shared.git}"
+MANIFEST="$WS/hrms-shared/WORKSPACE-REPOS.txt"
+
+ensure_manifest() {
+  [ -f "$MANIFEST" ] && return
+  mkdir -p "$WS"
+  [ -d "$WS/hrms-shared/.git" ] || git clone -q "$MANIFEST_REPO" "$WS/hrms-shared" || { echo "cannot clone $MANIFEST_REPO"; exit 1; }
+  git -C "$WS/hrms-shared" pull -q --ff-only
+  [ -f "$MANIFEST" ] || { echo "no $MANIFEST in hrms-shared"; exit 1; }
+}
+
+repos() { grep -vE '^\s*(#|$)' "$MANIFEST"; }
+
+enable_hooks() { [ -d "$1/.githooks" ] && git -C "$1" config core.hooksPath .githooks; }
+
+cmd_setup() {
+  ensure_manifest
+  repos | while read -r name url _; do
+    dir="$WS/$name"
+    if [ -d "$dir/.git" ]; then enable_hooks "$dir"; continue; fi
+    if git clone -q "$url" "$dir"; then enable_hooks "$dir"; echo "cloned  $name"; else echo "FAILED  $name ($url)"; fi
+  done
+  echo "setup done: $(repos | wc -l) repos in $WS"
+}
+
+cmd_pull() {
+  ensure_manifest
+  git -C "$WS/hrms-shared" pull -q --ff-only 2>/dev/null  # newest manifest first
+  repos | while read -r name _; do
+    dir="$WS/$name"
+    [ -d "$dir/.git" ] || { echo "MISSING $name (run: workspace setup)"; continue; }
+    branch=$(git -C "$dir" branch --show-current)
+    before=$(git -C "$dir" rev-parse HEAD)
+    if ! out=$(git -C "$dir" pull -q --ff-only origin "$branch" 2>&1); then
+      echo "FAILED  $name ($branch): $(echo "$out" | grep -m1 -E 'fatal|error|diverg|overwritten|Not possible' || echo "$out" | tail -1)"
+      continue
+    fi
+    n=$(git -C "$dir" rev-list --count "$before"..HEAD)
+    [ "$n" -gt 0 ] || continue
+    echo "NEW     $name ($branch): $n"
+    git -C "$dir" log --format='          %h %an %ad %s' --date=format:'%d %b %H:%M' "$before"..HEAD | head -5
+  done
+  echo "pull done"
+}
+
+cmd_status() {
+  ensure_manifest
+  printf '%-28s %-12s %6s %6s %6s\n' REPO BRANCH AHEAD BEHIND DIRTY
+  repos | while read -r name _; do
+    dir="$WS/$name"
+    [ -d "$dir/.git" ] || { printf '%-28s %s\n' "$name" MISSING; continue; }
+    br=$(git -C "$dir" branch --show-current)
+    ab=$(git -C "$dir" rev-list --left-right --count "HEAD...origin/$br" 2>/dev/null || echo "? ?")
+    printf '%-28s %-12s %6s %6s %6s\n' "$name" "$br" ${ab} "$(git -C "$dir" status --short | wc -l)"
+  done
+}
+
+case "${1:-}" in
+  setup) cmd_setup ;;
+  pull) cmd_pull ;;
+  status) cmd_status ;;
+  *) echo "usage: workspace setup | pull | status"; exit 2 ;;
+esac

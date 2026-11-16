@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 # Print the git facts a handoff needs, straight from git, so no model has to remember them.
-# Usage: handoff-facts [--since <git date>] [dir ...]   (default: today, ~/code/hrms-project and ~/ai-setup)
+# Usage: handoff-facts [--since <git date>] [dir ...]   (default: today, the repos in WORKSPACE-REPOS.txt and ~/ai-setup)
 # Each dir is a repo or a folder of repos (one level deep).
 set -uo pipefail
 since="midnight"
 if [ "${1:-}" = "--since" ]; then since="$2"; shift 2; fi
-[ $# -gt 0 ] || set -- "$HOME/code/hrms-project" "$HOME/ai-setup"
+if [ $# -eq 0 ]; then  # default: the active repos in the workspace manifest, plus ai-setup
+  m="$HOME/code/hrms-project/hrms-shared/WORKSPACE-REPOS.txt"
+  if [ -f "$m" ]; then set -- $(grep -vE '^\s*(#|$)' "$m" | awk -v w="$HOME/code/hrms-project" '{print w "/" $1}') "$HOME/ai-setup"
+  else set -- "$HOME/code/hrms-project" "$HOME/ai-setup"; fi
+fi
 
 cap() { awk -v n=8 'NR<=n{print "- " $0} END{if(NR>n) print "- … +" NR-n " more"}'; }
 
