@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# Copy this repo's rules, skills and hook into Claude Code, Antigravity and
+# Antigravity profile 2. Copies, never links, so the tools keep working if this
+# repo moves. Skills this script installed earlier but the repo no longer has
+# are removed; skills installed by anything else are left alone.
+# Usage: ./sync.sh [--dry-run]
+set -euo pipefail
+REPO="$(cd "$(dirname "$0")" && pwd)"
+DRY=0; [ "${1:-}" = "--dry-run" ] && DRY=1
+run() { if [ $DRY = 1 ]; then echo "would: $*"; else "$@"; fi; }
+
+sync_skills() { # $1 = skills dir
+  local dir="$1" manifest="$1/.ai-setup-managed" name
+  run mkdir -p "$dir"
+  if [ -f "$manifest" ]; then
+    while read -r name; do
+      [ -n "$name" ] && [ ! -d "$REPO/skills/$name" ] && run rm -rf "${dir:?}/${name:?}"
+    done < "$manifest"
+  fi
+  for s in "$REPO"/skills/*/; do
+    name="$(basename "$s")"
+    run rm -rf "${dir:?}/${name:?}"
+    run cp -r "$s" "$dir/$name"
+  done
+  [ $DRY = 1 ] || ls "$REPO/skills" > "$manifest"
+}
+
+install_hook() { # $1 = hooks dir, $2 = template, $3 = target json, $4 = merge|replace
+  run mkdir -p "$1"
+  run cp "$REPO/hooks/guard-bash.py" "$1/guard-bash.py"
+  [ $DRY = 1 ] && { echo "would: write $3 from $2"; return; }
+  python3 - "$2" "$3" "$1" "$4" <<'PY'
+import json, os, sys
+tpl, target, hooks, mode = sys.argv[1:]
+new = json.loads(open(tpl).read().replace("@HOOKS@", hooks))
+cur = {}
+if mode == "merge" and os.path.exists(target):
+    cur = json.load(open(target))
+cur.update(new)  # template keys win; other settings are kept
+json.dump(cur, open(target, "w"), indent=2)
+open(target, "a").write("\n")
+PY
+}
+
+# Claude Code
+run cp "$REPO/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+sync_skills "$HOME/.claude/skills"
+install_hook "$HOME/.claude/hooks" "$REPO/claude/settings.json" "$HOME/.claude/settings.json" merge
+
+# Antigravity (profile 1 and 2). Profile 2's skills folder links to profile 1's.
+for home in "$HOME" "$HOME/.antigravity-profile-2"; do
+  [ -d "$home/.gemini" ] || continue
+  run cp "$REPO/AGENTS.md" "$home/.gemini/GEMINI.md"
+  install_hook "$home/.gemini/hooks" "$REPO/antigravity/hooks.json" "$home/.gemini/config/hooks.json" replace
+done
+sync_skills "$HOME/.gemini/antigravity/skills"
+
+echo "synced from $REPO$([ $DRY = 1 ] && echo ' (dry run)')"
