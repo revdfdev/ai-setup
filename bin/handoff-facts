@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Print the git facts a handoff needs, straight from git, so no model has to remember them.
+# Usage: handoff-facts [--since <git date>] [dir ...]   (default: today, ~/code/hrms-project and ~/ai-setup)
+# Each dir is a repo or a folder of repos (one level deep).
+set -uo pipefail
+since="midnight"
+if [ "${1:-}" = "--since" ]; then since="$2"; shift 2; fi
+[ $# -gt 0 ] || set -- "$HOME/code/hrms-project" "$HOME/ai-setup"
+
+cap() { awk -v n=8 'NR<=n{print "- " $0} END{if(NR>n) print "- … +" NR-n " more"}'; }
+
+repos=()
+for d in "$@"; do
+  if [ -e "$d/.git" ]; then repos+=("$d")
+  else for r in "$d"/*/; do [ -e "$r.git" ] && repos+=("${r%/}"); done; fi
+done
+
+echo "# Git facts ($(date '+%Y-%m-%d %H:%M'), since: $since)"
+echo
+for r in "${repos[@]}"; do
+  today=$(git -C "$r" log --since="$since" --format='%h %s' 2>/dev/null)
+  dirty=$(git -C "$r" status --short 2>/dev/null)
+  if git -C "$r" rev-parse -q --verify '@{u}' >/dev/null 2>&1; then
+    unpushed=$(git -C "$r" log '@{u}..HEAD' --format='%h %s')
+  else
+    unpushed=$(git -C "$r" log HEAD --not --remotes --format='%h %s' 2>/dev/null)
+  fi
+  docs=$(git -C "$r" log --since="$since" --name-only --format= -- '.agents/memory/decisions/*' 'docs/designs/*' 2>/dev/null | sort -u)
+  [ -z "$today$dirty$unpushed" ] && continue
+  echo "## ${r/#$HOME/\~} ($(git -C "$r" branch --show-current 2>/dev/null))"
+  [ -n "$today" ] && { echo "Commits since $since:"; echo "$today" | cap; }
+  [ -n "$unpushed" ] && { echo "Unpushed:"; echo "$unpushed" | cap; }
+  [ -n "$docs" ] && { echo "Decisions/designs changed:"; echo "$docs" | cap; }
+  [ -n "$dirty" ] && { echo "Uncommitted (check who owns them before touching):"; echo "$dirty" | cap; }
+  echo
+done

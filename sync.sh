@@ -55,6 +55,10 @@ for home in "$HOME" "$HOME/.antigravity-profile-2"; do
 done
 sync_skills "$HOME/.gemini/antigravity/skills"
 
+# Command-line helpers (e.g. handoff-facts) into ~/.local/bin
+run mkdir -p "$HOME/.local/bin" "$HOME/.local/share/ai-setup/handoffs"
+for b in "$REPO"/bin/*; do run cp "$b" "$HOME/.local/bin/$(basename "$b")"; done
+
 # EGM plugin (google/elephant-goldfish-model). Claude: official plugin commands.
 # Antigravity has no agy CLI here: copy the full bundle, as EGM's docs/harnesses.md says.
 EGM_SRC="$HOME/.local/share/ai-setup/egm"

@@ -1,35 +1,62 @@
 ---
 name: handoff
 disable-model-invocation: true
-description: Write a short, verified handoff so a new thread or another agent (Claude, Codex, Antigravity) can continue the work without the old chat. Use when the user asks for a handoff, ends a session, or the thread is long, looping or cut off.
+description: Write a handoff file so a new session can continue the full scope without the old chat, and without trusting this session's memory.
 ---
 
 # Handoff
 
-Write the handoff from live evidence, not memory of the chat. Check repo state
-(`git -C <repo> status --short`, `git log --oneline -5`) and the active tracker
-`STATE.md` before writing.
+A handoff fails when it is written from memory: the next session trusts it and guesses
+the gaps. So facts come from a script, every other claim carries a source, and the
+next session checks before acting.
 
-1. If a tracker is active, update its `STATE.md` first (checklist, blockers,
-   next step). The handoff points to it instead of repeating it.
-2. Output one block the user can paste into the next thread:
+1. **Record decisions first.** Each verified decision that should outlive the task:
+   `dotagents-adr new "<decision>"` in the owning repo, `dotagents-adr index`, commit.
+   The handoff links them; it does not retell them.
+2. **Collect facts with the script**, passing only the repos this task touched:
+   `handoff-facts <repo> [<repo> ...]` (add `--since "<date>"` if the work started
+   before today). Paste its output unchanged; never type commits or file lists yourself.
+3. **Write the file** `~/.local/share/ai-setup/handoffs/<YYYY-MM-DD>-<topic>.md`:
 
-```
-Handoff — <date>
-Goal: <one line: what the user wants>
-State: <done / in progress / blocked, one line each>
-Facts: <verified facts the next agent needs: commits, environments, test
-        employees, commands that prove things; mark anything unverified>
-Next step: <the single next action, and whether it needs user approval>
-Files: <tracker STATE.md, register, key source files, uncommitted changes>
-Don't: <traps already hit, e.g. wrong BASE_URL, others' uncommitted files>
+```markdown
+# Handoff: <topic> (<date>)
+
+Read this, then check every item against its source before acting. Anything not
+here or not checkable is unknown: ask the user, don't guess.
+
+## Goal
+<the user's goal in their own words, quoted>
+
+## Decisions (each with a source)
+- <decision> — source: <user quote "…" | ADR id | commit | file:line>
+
+## Rejected (don't propose again)
+- <option> — why: <user quote or evidence>
+
+## Done (each with proof)
+- <what> — proof: <commit | command → result>
+
+## Not done / open
+- <item> — status: <not started | partial: what exists> — blocker or question
+
+## Next step
+<one action; say if it needs the user's approval>
+
+## Traps already hit
+- <mistake and the fact that avoids it>
+
+## Unverified
+- <anything believed but not checked this session>
+
+## Git facts
+<handoff-facts output, unchanged>
 ```
 
 Rules:
-
-- Keep it under ~25 lines; detail belongs in the tracker.
-- Only facts you checked this session; say "not verified" otherwise.
-- Name exact commits, branches and unpushed work. Never include secrets.
-- List other agents' uncommitted files as "not ours, leave alone".
-- If the user wants it saved, save durable facts to memory;
-  the handoff itself stays in chat.
+- No length cap. Cover the full scope of the user's request, including what was
+  asked but not done. Re-read the user's messages in this session to find it.
+- A claim without a source goes under **Unverified**, never elsewhere.
+- Quote the user for goals, decisions and rejections; don't paraphrase what they meant.
+- No secrets. Other agents' uncommitted files stay listed as the script prints them.
+- In chat, give only the file path and one line for the next session:
+  `Read ~/.local/share/ai-setup/handoffs/<file> and verify each item before acting.`
