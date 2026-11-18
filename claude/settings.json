@@ -9,7 +9,7 @@
   },
   "modelSettings": {
     "claude-opus-5-5": {
-      "effortLevel": "low"
+      "effortLevel": "medium"
     },
     "claude-sonnet-5-5": {
       "effortLevel": "low"
@@ -50,6 +50,17 @@
             "type": "command",
             "command": "[ ! -x \"$HOME/.local/bin/dotagents-lint\" ] || \"$HOME/.local/bin/dotagents-lint\" --hook",
             "timeout": 30
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 -I \"@HOOKS@/context-warn-claude.py\"",
+            "timeout": 10
           }
         ]
       }

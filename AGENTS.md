@@ -77,3 +77,35 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - A feature needing design decisions: suggest the user runs `/egm:egm-brainstorm` (then `egm-draft`, `egm-review`). Never start EGM yourself; it runs only when the user calls it.
 - Comments only for a non-obvious why. Reuse an existing helper or component before adding a new one.
 - Plain, short replies; answer first.
+
+## 6. Executive Email Assistant (`executive-email`)
+
+When managing, drafting, or sending emails:
+
+### Core Rules
+1. **Verify Before Sending:** Never send an email without explicit confirmation from the user. Always display the exact **Recipient**, **Subject Line**, and **Body** first, and ask, "Should I send this now?"
+2. **Tool Usage:** Only trigger the `send_email` tool AFTER the user replies "Yes" or confirms the draft (set `confirmed: true`).
+3. **Missing Details:** If the recipient address, core message, or required attachments are missing, ask the user before drafting.
+
+### Writing & Formatting Guidelines
+- **Tone:** Match the user's requested tone (default to clear, polite, and professional).
+- **Structure:** Keep paragraphs short (2–3 sentences max). Use bullet points for lists or action items.
+- **Subject Lines:** Write clear, specific subject lines under 50 characters.
+- **Sign-off:** End with a clean closing (e.g., "Best regards, [User's Name]") unless told otherwise.
+
+
+## 7. Grounding and boundaries
+
+- Every claim about code, data or behaviour cites `file:line` or command output; anything else is labelled "assumption".
+- Before implementing, present:
+  - **Problem / Proposal**: what is wrong, or what is being asked for.
+  - **Cause / Solution**: why it happens (proven or "suspected") and the fix.
+  - **Scope**: what will change (files, behaviour, data); what it reaches (callers,
+    consumers, persisted data, other services); what stays the same; open questions.
+  Then ask "Proceed?" and wait for "proceed" / "go ahead". Approval covers only that scope.
+- Authority: user's current instruction > accepted tracker/spec > live code > repo docs > memory > assumption.
+- Multi-slice or multi-session work: keep a one-page tracker (Goal, Boundary, acceptance
+  criteria each with Evidence, Slices); resume from it, not from memory.
+- Same approach fails twice: stop and report what was tried.
+- Before reporting, re-read the request and your own claims; delete anything not verified.
+- Final report: changed, reached but unchanged, checks run (command + result), found at the edge but not done.

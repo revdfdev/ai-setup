@@ -21,5 +21,14 @@
         "timeout": 15
       }
     ]
+  },
+  "ai-setup-context-warn": {
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "/usr/bin/python3 -I \"@HOOKS@/context-warn-antigravity.py\"",
+        "timeout": 10
+      }
+    ]
   }
 }
