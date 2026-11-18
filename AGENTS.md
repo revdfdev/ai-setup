@@ -73,6 +73,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Persisted data: dry-run, show the diff, wait for "apply", per environment; name the environment queried.
 - Never touch uncommitted files you didn't change; other agents work in the same repos.
 - Commit locally per slice; push only when the whole feature is done and the user approves. Never commit credentials.
+- The user is the only developer: work and commit directly on `main` in every repo. Never create feature, backup or other branches.
 - A verified decision the code can't show: `dotagents-adr new "<decision>"` in the owning repo, then `dotagents-adr index`. Never record status or logs.
 - A feature needing design decisions: suggest the user runs `/egm:egm-brainstorm` (then `egm-draft`, `egm-review`). Never start EGM yourself; it runs only when the user calls it.
 - Comments only for a non-obvious why. Reuse an existing helper or component before adding a new one.
@@ -92,6 +93,10 @@ When managing, drafting, or sending emails:
 - **Structure:** Keep paragraphs short (2–3 sentences max). Use bullet points for lists or action items.
 - **Subject Lines:** Write clear, specific subject lines under 50 characters.
 - **Sign-off:** End with a clean closing (e.g., "Best regards, [User's Name]") unless told otherwise.
+
+### WhatsApp (`executive-whatsapp`)
+- Same rule: show the exact **Recipient** (international number) and **Message**, ask "Should I send this now?", and call `send_whatsapp` with `confirmed: true` only after an explicit yes.
+- Default link mode opens WhatsApp with the message filled in and the user presses Send: report "opened", not "sent".
 
 
 ## 7. Grounding and boundaries
