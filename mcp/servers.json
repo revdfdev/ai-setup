@@ -1,0 +1,10 @@
+{
+  "executive-email": {
+    "command": "python3",
+    "args": ["@HOME@/.config/executive-email/executive_email.py", "mcp"]
+  },
+  "executive-whatsapp": {
+    "command": "python3",
+    "args": ["@HOME@/.config/executive-whatsapp/executive_whatsapp.py", "mcp"]
+  }
+}

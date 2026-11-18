@@ -42,8 +42,33 @@ open(target, "a").write("\n")
 PY
 }
 
+install_mcp() { # $1 = Antigravity mcp_config.json; servers in mcp/servers.json win, others kept
+  [ $DRY = 1 ] && { echo "would: merge mcp/servers.json into $1"; return; }
+  python3 - "$REPO/mcp/servers.json" "$1" "$HOME" <<'PY'
+import json, os, sys
+src, target, home = sys.argv[1:]
+new = json.loads(open(src).read().replace("@HOME@", home))
+cur = {}
+if os.path.exists(target) and os.path.getsize(target):
+    cur = json.load(open(target))
+cur.setdefault("mcpServers", {}).update(new)
+json.dump(cur, open(target, "w"), indent=2)
+open(target, "a").write("\n")
+PY
+}
+
+install_claude_mcp() { # user-scope servers; an existing one is replaced so args stay current
+  python3 -c 'import json,sys;[print(k,*v["args"]) for k,v in json.loads(open(sys.argv[1]).read().replace("@HOME@",sys.argv[2])).items()]' \
+    "$REPO/mcp/servers.json" "$HOME" | while read -r name script mode; do
+    if [ $DRY = 1 ]; then echo "would: claude mcp add $name -s user -- python3 $script $mode"; continue; fi
+    claude mcp remove "$name" -s user >/dev/null 2>&1 || true
+    claude mcp add "$name" -s user -- python3 "$script" "$mode" >/dev/null
+  done
+}
+
 # Claude Code
 run cp "$REPO/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+install_claude_mcp
 sync_skills "$HOME/.claude/skills"
 install_hook "$HOME/.claude/hooks" "$REPO/claude/settings.json" "$HOME/.claude/settings.json" merge
 
@@ -54,6 +79,7 @@ for home in "$HOME" "$HOME/.antigravity-profile-2"; do
   run cp "$REPO/AGENTS.md" "$home/.gemini/GEMINI.md"
   install_hook "$home/.gemini/hooks" "$REPO/antigravity/hooks.json" "$home/.gemini/config/hooks.json" replace
   sync_skills "$home/.gemini/config/skills"
+  install_mcp "$home/.gemini/config/mcp_config.json"
 done
 
 # Command-line helpers (e.g. handoff-facts) into ~/.local/bin

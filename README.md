@@ -11,6 +11,7 @@ Global rules, skills and the shell guard hook for Claude Code and Antigravity
 | `bin/*` (`workspace`, `handoff-facts`) | `~/.local/bin` |
 | `claude/settings.json` | merged into `~/.claude/settings.json` (these keys win, others kept) |
 | `antigravity/hooks.json` | replaces each profile's `.gemini/config/hooks.json` |
+| `mcp/servers.json` (`executive-email`, `executive-whatsapp`) | `claude mcp add -s user`; merged into each profile's `.gemini/config/mcp_config.json` (these servers win, others kept) |
 
 ```sh
 workspace setup      # clone/enable hooks for the repos in hrms-shared/WORKSPACE-REPOS.txt
