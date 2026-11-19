@@ -2,7 +2,7 @@
 import json
 import sys
 
-WARN_TOKENS = 400_000
+WARN_TOKENS = 200_000
 
 
 def last_context_tokens(path):
