@@ -113,3 +113,15 @@ When managing, drafting, or sending emails:
 - Same approach fails twice: stop and report what was tried.
 - Before reporting, re-read the request and your own claims; delete anything not verified.
 - Final report: changed, reached but unchanged, checks run (command + result), found at the edge but not done.
+
+## 8. Mandatory Reference Analysis
+
+Before inspecting or implementing anything based on an
+external or supplied reference project:
+
+1. Read `REFERENCE_ANALYSIS.md` completely.
+2. Follow its repository inspection and evidence rules.
+3. Never claim source-code verification without evidence.
+4. Distinguish verified facts from inferences and unknowns.
+
+These rules apply to every task involving reference projects.
