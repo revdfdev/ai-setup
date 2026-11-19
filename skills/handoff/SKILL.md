@@ -33,6 +33,11 @@ here or not checkable is unknown: ask the user, don't guess.
 ## Rejected (don't propose again)
 - <option> — why: <user quote or evidence>
 
+## Test status
+| Item | e2e | Manual (user) |
+|---|---|---|
+| <item> | <spec file → passed/failed, date> or not run | tested — source: <user quote "…"> or not tested |
+
 ## Done (each with proof)
 - <what> — proof: <commit | command → result>
 
@@ -56,6 +61,11 @@ Rules:
 - No length cap. Cover the full scope of the user's request, including what was
   asked but not done. Re-read the user's messages in this session to find it.
 - A claim without a source goes under **Unverified**, never elsewhere.
+- **Test status** has a row for every item that was built or fixed. Done means the
+  user tested it manually; an e2e pass alone is "e2e passed, awaiting manual". Carry
+  rows over from the previous handoff, updated, never dropped.
+- The next session trusts Test status: it does not re-run or re-ask about a row
+  marked tested unless that item's code changed after the test.
 - Quote the user for goals, decisions and rejections; don't paraphrase what they meant.
 - No secrets. Other agents' uncommitted files stay listed as the script prints them.
 - In chat, give only the file path and one line for the next session:
