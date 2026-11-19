@@ -16,3 +16,4 @@
 - 2026-11-16: "No trackers" and the handoff request removed from the rules; they conflicted with the user's stated preferences.
 - 2026-11-08: Bash guard matches subcommands after global flags (`kubectl -n x delete`, `helm -n x upgrade`). Reason: a real prod `helm -n … upgrade` passed the old guard.
 - 2026-11-19: EGM removed (unused; its agent list cost tokens every session). sync.sh no longer installs it.
+- 2026-11-19: `grilling` restored (call-only) now that EGM is gone.
