@@ -15,3 +15,4 @@
 - 2026-11-16: `effortLevel: low` set again for all models (reverses 2026-11-08). Raise it per session with `/config` for incident or infra work.
 - 2026-11-16: "No trackers" and the handoff request removed from the rules; they conflicted with the user's stated preferences.
 - 2026-11-08: Bash guard matches subcommands after global flags (`kubectl -n x delete`, `helm -n x upgrade`). Reason: a real prod `helm -n … upgrade` passed the old guard.
+- 2026-11-19: EGM removed (unused; its agent list cost tokens every session). sync.sh no longer installs it.

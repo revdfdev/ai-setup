@@ -60,22 +60,4 @@ done
 run mkdir -p "$HOME/.local/bin" "$HOME/.local/share/ai-setup/handoffs"
 for b in "$REPO"/bin/*; do run cp "$b" "$HOME/.local/bin/$(basename "$b")"; done
 
-# EGM plugin (google/elephant-goldfish-model). Claude: official plugin commands.
-# Antigravity has no agy CLI here: copy the full bundle, as EGM's docs/harnesses.md says.
-EGM_SRC="$HOME/.local/share/ai-setup/egm"
-if [ $DRY = 1 ]; then
-  echo "would: update $EGM_SRC, install egm@egm in Claude, copy egm into each Antigravity profile"
-else
-  if [ -d "$EGM_SRC/.git" ]; then git -C "$EGM_SRC" pull -q --ff-only
-  else mkdir -p "$(dirname "$EGM_SRC")"; git clone -q https://github.com/google/elephant-goldfish-model.git "$EGM_SRC"; fi
-  claude plugin marketplace list 2>/dev/null | grep -q '\begm\b' || claude plugin marketplace add google/elephant-goldfish-model >/dev/null
-  claude plugin install egm@egm >/dev/null 2>&1 || claude plugin update egm@egm >/dev/null 2>&1 || true
-  for home in "$HOME" "$HOME/.antigravity-profile-2"; do
-    [ -d "$home/.gemini/config" ] || continue
-    dest="$home/.gemini/config/plugins/egm"
-    rm -rf "${dest:?}"; mkdir -p "$dest"
-    (cd "$EGM_SRC" && cp -R plugin.json README.md LICENSE skills agents resources docs assets "$dest/")
-  done
-fi
-
 echo "synced from $REPO$([ $DRY = 1 ] && echo ' (dry run)')"
