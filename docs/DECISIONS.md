@@ -15,3 +15,7 @@
 - 2026-11-16: `effortLevel: low` set again for all models (reverses 2026-11-08). Raise it per session with `/config` for incident or infra work.
 - 2026-11-16: "No trackers" and the handoff request removed from the rules; they conflicted with the user's stated preferences.
 - 2026-11-08: Bash guard matches subcommands after global flags (`kubectl -n x delete`, `helm -n x upgrade`). Reason: a real prod `helm -n … upgrade` passed the old guard.
+- 2026-11-19: EGM removed (unused; its agent list cost tokens every session). sync.sh no longer installs it.
+- 2026-11-19: `grilling` restored (call-only) now that EGM is gone.
+- 2026-11-19: Synced claude.ai `anthropic-skills:*` set to `user-invocable-only` via `skillOverrides` in `claude/settings.json` (kept, but only by `/name`). Checked: a new `claude -p` session no longer lists them.
+- 2026-11-19: Antigravity (agy engine, also behind the VS Code extension) does honour `disable-model-invocation: true`; the 2026-11-16 note above is outdated. Checked: `agy -p` lists only its own agy-customizations, antigravity-guide, run-workflow, swarm as self-activatable.

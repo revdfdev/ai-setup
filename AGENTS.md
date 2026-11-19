@@ -75,7 +75,6 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Commit locally per slice; push only when the whole feature is done and the user approves. Never commit credentials.
 - The user is the only developer: work and commit directly on `main` in every repo. Never create feature, backup or other branches.
 - A verified decision the code can't show: `dotagents-adr new "<decision>"` in the owning repo, then `dotagents-adr index`. Never record status or logs.
-- A feature needing design decisions: suggest the user runs `/egm:egm-brainstorm` (then `egm-draft`, `egm-review`). Never start EGM yourself; it runs only when the user calls it.
 - Comments only for a non-obvious why. Reuse an existing helper or component before adding a new one.
 - Plain, short replies; answer first.
 
