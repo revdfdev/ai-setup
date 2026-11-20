@@ -74,6 +74,9 @@ run cp "$REPO/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 install_claude_mcp
 sync_skills "$HOME/.claude/skills"
 install_hook "$HOME/.claude/hooks" "$REPO/claude/settings.json" "$HOME/.claude/settings.json" merge
+# The HRMS workspace holds many git repos, so engram can't pick a project there; pin it to hrms.
+ws="${HRMS_WORKSPACE:-$HOME/code/hrms-project}"
+[ -d "$ws" ] && run cp "$REPO/mcp/hrms-workspace.mcp.json" "$ws/.mcp.json"
 
 # Antigravity (profile 1 and 2). Global skills load from ~/.gemini/config/skills
 # (Antigravity's builtin agy-customizations guide; confirmed in its session logs).
