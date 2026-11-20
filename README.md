@@ -11,7 +11,18 @@ Global rules, skills and the shell guard hook for Claude Code and Antigravity
 | `bin/*` (`workspace`, `handoff-facts`) | `~/.local/bin` |
 | `claude/settings.json` | merged into `~/.claude/settings.json` (these keys win, others kept) |
 | `antigravity/hooks.json` | replaces each profile's `.gemini/config/hooks.json` |
-| `mcp/servers.json` (`executive-email`, `executive-whatsapp`) | `claude mcp add -s user`; merged into each profile's `.gemini/config/mcp_config.json` (these servers win, others kept) |
+| `mcp/servers.json` (`executive-email`, `executive-whatsapp`, `engram`) | `claude mcp add -s user`; merged into each profile's `.gemini/config/mcp_config.json` (these servers win, others kept) |
+
+### Note for Office Machine Setup: Engram
+Install `engram` binary (v3.7.2+) into `~/.local/bin` before running `./sync.sh`:
+```sh
+curl -sL "https://github.com/Gentleman-Programming/engram/releases/download/v3.7.2/engram_3.7.2_linux_amd64.tar.gz" | tar -xz -C ~/.local/bin/ engram
+chmod +x ~/.local/bin/engram
+```
+Or via Homebrew:
+```sh
+brew install gentleman-programming/tap/engram
+```
 
 ```sh
 workspace setup      # clone/enable hooks for the repos in hrms-shared/WORKSPACE-REPOS.txt

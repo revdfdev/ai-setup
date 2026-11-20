@@ -58,11 +58,12 @@ PY
 }
 
 install_claude_mcp() { # user-scope servers; an existing one is replaced so args stay current
-  python3 -c 'import json,sys;[print(k,*v["args"]) for k,v in json.loads(open(sys.argv[1]).read().replace("@HOME@",sys.argv[2])).items()]' \
-    "$REPO/mcp/servers.json" "$HOME" | while read -r name script mode; do
-    if [ $DRY = 1 ]; then echo "would: claude mcp add $name -s user -- python3 $script $mode"; continue; fi
+  python3 -c 'import json,sys;[print(k, v.get("command", "python3"), *v["args"]) for k,v in json.loads(open(sys.argv[1]).read().replace("@HOME@",sys.argv[2])).items()]' \
+    "$REPO/mcp/servers.json" "$HOME" | while read -r name cmd rest; do
+    if [ $DRY = 1 ]; then echo "would: claude mcp add $name -s user -- $cmd $rest"; continue; fi
     claude mcp remove "$name" -s user >/dev/null 2>&1 || true
-    claude mcp add "$name" -s user -- python3 "$script" "$mode" >/dev/null
+    # shellcheck disable=SC2086
+    claude mcp add "$name" -s user -- "$cmd" $rest >/dev/null
   done
 }
 

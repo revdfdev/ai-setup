@@ -125,3 +125,8 @@ external or supplied reference project:
 4. Distinguish verified facts from inferences and unknowns.
 
 These rules apply to every task involving reference projects.
+
+## 9. Engram (Persistent Memory)
+
+- Only save architectural decisions, bug fixes, and user preferences to `engram` when asked or at the end of a major task.
+- Search `engram` with compact queries only when prior project context is needed.
