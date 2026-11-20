@@ -42,12 +42,14 @@ open(target, "a").write("\n")
 PY
 }
 
-install_mcp() { # $1 = Antigravity mcp_config.json; servers in mcp/servers.json win, others kept
-  [ $DRY = 1 ] && { echo "would: merge mcp/servers.json into $1"; return; }
-  python3 - "$REPO/mcp/servers.json" "$1" "$HOME" <<'PY'
+install_mcp() { # $1 = Antigravity mcp_config.json; servers in mcp/servers.json, then mcp/antigravity-servers.json, win; others kept
+  [ $DRY = 1 ] && { echo "would: merge mcp/servers.json + mcp/antigravity-servers.json into $1"; return; }
+  python3 - "$REPO/mcp/servers.json" "$1" "$HOME" "$REPO/mcp/antigravity-servers.json" <<'PY'
 import json, os, sys
-src, target, home = sys.argv[1:]
+src, target, home, extra = sys.argv[1:]
 new = json.loads(open(src).read().replace("@HOME@", home))
+# Antigravity has one config per profile and is only used for HRMS, so its engram is pinned to the hrms project.
+new.update(json.loads(open(extra).read().replace("@HOME@", home)))
 cur = {}
 if os.path.exists(target) and os.path.getsize(target):
     cur = json.load(open(target))
