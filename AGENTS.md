@@ -130,3 +130,26 @@ These rules apply to every task involving reference projects.
 
 - Only save architectural decisions, bug fixes, and user preferences to `engram` when asked or at the end of a major task.
 - Search `engram` with compact queries only when prior project context is needed.
+
+## 10. Universal Anti-Mock, Spec-Fidelity & Plain-Language UX Law
+
+This rule applies universally across every project, frontend, mobile app, web app, and CLI.
+
+### A. Zero Synthetic Data (No Mocks in Live Code)
+- **Never Hardcode Mock Data**: Never declare static arrays, fake user lists, seeded conversation histories, or dummy JSON objects to simulate a working screen.
+- **Mandatory Sovereign Empty States**: When an underlying collection is empty, render an honest, functional zero-state explaining real-world status and how to add or produce data.
+- **Stop on Missing Contracts**: If an API route, database query, FFI bridge, or backend function does not exist to feed a component, **STOP IMMEDIATELY**. Name the missing contract and ask the user. Never invent fake local fallbacks to mask missing plumbing.
+
+### B. Spec Fidelity (No Speculative UI / Design Drift)
+- **Build Only the Approved Spec**: Implement only the requested screen and required controls. Never invent extra screens, unprompted feature tabs, or decorative desktop/mobile chrome (e.g. simulated `9:41` status bars, fake window buttons).
+- **Tokens Only**: Colors, typography, spacing, and component shapes must read strictly from the project's design tokens or theme definitions. Never introduce inline magic hex values, random radii, or arbitrary padding.
+
+### C. Universal Jargon Ban (Technical & Domain Jargons)
+- **No Leaking Engineering / Infrastructure Terms**: Never display backend, infrastructure, or cryptographic terms on user-facing screens (e.g., `Node`, `Peer`, `Payload`, `Entity`, `UUID/GUID`, `Hex IDs`, `Socket`, `IPC`, `Ingress`, `HTTP 200/500`, `Database Sync Error`, `CRUD`, `Handshake`).
+- **No Raw Domain / Database Acronyms**: Never expose internal database column names, raw system enum identifiers, or obscure enterprise acronyms to end-users (e.g., in HRMS, use "Present", "Shift", "Overtime", never raw internal resolution codes or database keys).
+- **The Two-Layer Rule**: In apps where technical verification is a feature (e.g., cryptography, audits, distributed systems), technical proofs belong exclusively in Layer 2 (a secondary "Verification" or "Inspection" sheet/modal opened only when deliberately requested). Primary screens remain 100% human.
+
+### D. Human Action-Oriented Microcopy & Error Handling
+- **Everyday Language**: Use natural, conversational phrasing (e.g., "turn on/turn off" instead of "enable/disable", "files" instead of "payloads").
+- **Button Verbs**: Start buttons with clear, concrete action verbs ("Save profile", "Start call", "Add member"), never vague labels ("Submit", "OK", "Proceed").
+- **Actionable Errors**: Errors must plainly explain: (1) what happened simply, (2) why, and (3) what clear action the user can take next. Never show raw stack traces or cryptic failure codes.
