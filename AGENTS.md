@@ -153,3 +153,11 @@ This rule applies universally across every project, frontend, mobile app, web ap
 - **Everyday Language**: Use natural, conversational phrasing (e.g., "turn on/turn off" instead of "enable/disable", "files" instead of "payloads").
 - **Button Verbs**: Start buttons with clear, concrete action verbs ("Save profile", "Start call", "Add member"), never vague labels ("Submit", "OK", "Proceed").
 - **Actionable Errors**: Errors must plainly explain: (1) what happened simply, (2) why, and (3) what clear action the user can take next. Never show raw stack traces or cryptic failure codes.
+
+## 11. Read Before Acting
+
+- When told to read a document, spec, tracker or plan: read every line, in chunks if long. Never stop at the first section, a search hit or a summary.
+- Before planning, list each section of the document with one line saying what it requires.
+- Every step in a plan cites the document line it comes from, or says "assumption".
+- For an unfamiliar tool or library, read its docs or full `--help` before trying it; never guess and retry.
+- Anything not yet read is listed as "not read: <file> lines X-Y", never filled in. The `read-gate` hook blocks code edits and the end of a turn until a `.md` opened that turn is fully read or listed this way.
