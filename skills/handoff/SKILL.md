@@ -11,8 +11,8 @@ the gaps. So facts come from a script, every other claim carries a source, and t
 next session checks before acting.
 
 1. **Record decisions first.** Each verified decision that should outlive the task:
-   `dotagents-adr new "<decision>"` in the owning repo, `dotagents-adr index`, commit.
-   The handoff links them; it does not retell them.
+   `mem_save` each to engram (type `decision`, the repo as project).
+   The handoff names the engram topic; it does not retell them.
 2. **Collect facts with the script**, passing only the repos this task touched:
    `handoff-facts <repo> [<repo> ...]` (add `--since "<date>"` if the work started
    before today). Paste its output unchanged; never type commits or file lists yourself.
