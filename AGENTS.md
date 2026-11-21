@@ -75,7 +75,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Never touch uncommitted files you didn't change; other agents work in the same repos.
 - Commit locally per slice; push only when the whole feature is done and the user approves. Never commit credentials.
 - The user is the only developer: work and commit directly on `main` in every repo. Never create feature, backup or other branches.
-- A verified decision the code can't show: `mem_save` it to engram (type `decision`, the repo as project). Never record status or logs.
+- A verified decision the code can't show: `mem_save` it to engram (type `decision`, the repo as project; the HRMS workspace is pinned to `hrms`). Never record status or logs.
 - Comments only for a non-obvious why. Reuse an existing helper or component before adding a new one.
 - Plain, short replies; answer first.
 
@@ -111,21 +111,26 @@ When managing, drafting, or sending emails:
 - Authority: user's current instruction > accepted tracker/spec > live code > repo docs > memory > assumption.
 - Multi-slice or multi-session work: keep a one-page tracker (Goal, Boundary, acceptance
   criteria each with Evidence, Slices); resume from it, not from memory.
+- If the workspace CLAUDE.md names a tracker system, use it instead of a markdown tracker.
 - Same approach fails twice: stop and report what was tried.
 - Before reporting, re-read the request and your own claims; delete anything not verified.
 - Final report: changed, reached but unchanged, checks run (command + result), found at the edge but not done.
 
 ## 8. Mandatory Reference Analysis
 
-Before inspecting or implementing anything based on an
-external or supplied reference project:
+When a task uses an external or supplied reference project:
 
-1. Read `REFERENCE_ANALYSIS.md` completely.
-2. Follow its repository inspection and evidence rules.
-3. Never claim source-code verification without evidence.
-4. Distinguish verified facts from inferences and unknowns.
-
-These rules apply to every task involving reference projects.
+1. Analyse the reference thoroughly, module by module. Read every relevant
+   file in full; never work from a short skim or summary.
+2. Write the findings to `REFERENCE_ANALYSIS.md` in the project's docs:
+   per module, the concepts worth taking and the defects to avoid, each
+   citing `file:line`, plus a read log of what was read and what was not.
+3. Label every claim: verified (cited), inference, or unknown. Never claim
+   source-code verification without evidence.
+4. If `REFERENCE_ANALYSIS.md` already exists, read it completely first and
+   extend it; don't start over.
+5. Reference code is for concepts only. Never copy its product, and never
+   edit the reference repos.
 
 ## 9. Engram (Persistent Memory)
 
