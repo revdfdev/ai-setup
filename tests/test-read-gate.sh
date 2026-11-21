@@ -9,8 +9,10 @@ transcript() {
   python3 - "$1" "$tmp/t.jsonl" <<'PY'
 import json, sys
 cmd, out = sys.argv[1:]
-rows = [{"type": "user", "message": {"content": "go"}},
-        {"type": "assistant", "message": {"content": [{"type": "tool_use", "name": "Bash", "input": {"command": cmd}}]}}]
+earlier, cmd = cmd.split(" ;; ") if " ;; " in cmd else ("", cmd)
+call = lambda c: {"type": "assistant", "message": {"content": [{"type": "tool_use", "name": "Bash", "input": {"command": c}}]}}
+rows = ([{"type": "user", "message": {"content": "first"}}, call(earlier)] if earlier else []) + [
+        {"type": "user", "message": {"content": "go"}}, call(cmd)]
 open(out, "w").write("\n".join(json.dumps(r) for r in rows))
 PY
 }
@@ -27,4 +29,7 @@ check deny  "$HOME/repo/main.go"              "sed -n 1,5p $tmp/doc.md"
 check allow "/tmp/claude-1000/x/scratch.py"   "sed -n 1,5p $tmp/doc.md"
 check allow "$HOME/repo/main.go"              "head -1 $tmp/doc.md"
 check allow "$HOME/repo/main.go"              "cat $tmp/doc.md"
+# "A ;; B": A ran in an earlier turn, B in this one.
+check allow "$HOME/repo/main.go"              "cat $tmp/doc.md ;; sed -n 1,5p $tmp/doc.md"
+check deny  "$HOME/repo/main.go"              "sed -n 1,5p $tmp/doc.md ;; sed -n 6,9p $tmp/doc.md"
 exit $fail

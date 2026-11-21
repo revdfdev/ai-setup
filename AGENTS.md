@@ -71,7 +71,9 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Live code beats an approved plan: re-check the code before each step; if they disagree, stop and report.
 - Done = a named command and its result; otherwise say "not verified". A suspected cause is not a fact until a check proves it.
 - Commit messages end at the body; no trailers.
-- Persisted data: dry-run, show the diff, wait for "apply", per environment; name the environment queried.
+- Persisted data (databases, environments): dry-run, show the diff, wait for "apply"; name the environment queried. Tracker items (Plane): write directly.
+- Analysis: read code and docs; run builds and tests only when asked.
+- Agent setup (rules, hooks, skills, MCP servers): change it in ~/ai-setup, then run ./sync.sh.
 - Never touch uncommitted files you didn't change; other agents work in the same repos.
 - Commit locally per slice; push only when the whole feature is done and the user approves. Never commit credentials.
 - The user is the only developer: work and commit directly on `main` in every repo. Never create feature, backup or other branches.
@@ -108,7 +110,7 @@ When managing, drafting, or sending emails:
   - **Scope**: what will change (files, behaviour, data); what it reaches (callers,
     consumers, persisted data, other services); what stays the same; open questions.
   Then ask "Proceed?" and wait for "proceed" / "go ahead". Approval covers only that scope.
-- Authority: user's current instruction > accepted tracker/spec > live code > repo docs > memory > assumption.
+- Authority: user's current instruction > accepted tracker/spec > live code > repo docs > memory > assumption. Trust repo AGENTS.md/CLAUDE.md as written; check code only where the change depends on it or a doc and the code disagree.
 - Multi-slice or multi-session work: keep a one-page tracker (Goal, Boundary, acceptance
   criteria each with Evidence, Slices); resume from it, not from memory.
 - If the workspace CLAUDE.md names a tracker system, use it instead of a markdown tracker.

@@ -68,10 +68,10 @@ def shell_reads(command, cwd):
                 yield path, start, end
 
 
-def turn_calls(entries):
-    """(name, args) for each tool call since the last user prompt, both transcript formats."""
+def turn_calls(entries, session=False):
+    """(name, args) for each tool call since the last user prompt (or the whole session), both transcript formats."""
     if any(e.get("type") == "USER_INPUT" for e in entries):
-        start = max(i for i, e in enumerate(entries) if e.get("type") == "USER_INPUT")
+        start = -1 if session else max(i for i, e in enumerate(entries) if e.get("type") == "USER_INPUT")
         for e in entries[start + 1:]:
             if e.get("type") == "PLANNER_RESPONSE":
                 for call in e.get("tool_calls") or []:
@@ -86,7 +86,7 @@ def turn_calls(entries):
         return (e.get("type") == "user" and not e.get("isSidechain")
                 and not any(b.get("type") == "tool_result" for b in blocks(e)))
 
-    start = max((i for i, e in enumerate(entries) if is_prompt(e)), default=-1)
+    start = -1 if session else max((i for i, e in enumerate(entries) if is_prompt(e)), default=-1)
     for e in entries[start + 1:]:
         if e.get("type") == "assistant" and not e.get("isSidechain"):
             for b in blocks(e):
@@ -94,10 +94,10 @@ def turn_calls(entries):
                     yield b.get("name") or "", b.get("input") or {}
 
 
-def unread(entries, cwd):
-    """{path: [(start, end), ...]} unread line ranges of .md docs opened this turn."""
+def doc_reads(calls, cwd):
+    """{path: [(start, end), ...]} line ranges of .md docs read by these tool calls."""
     seen = {}
-    for name, args in turn_calls(entries):
+    for name, args in calls:
         reads = []
         if name == "Read":
             path = str(args.get("file_path") or "")
@@ -112,8 +112,16 @@ def unread(entries, cwd):
         for path, first, last in reads:
             if path.lower().endswith(DOC):
                 seen.setdefault(os.path.normpath(path), []).append((first, last))
+    return seen
+
+
+def unread(entries, cwd):
+    """{path: [(start, end), ...]} unread line ranges of .md docs opened this turn;
+    reads from earlier turns of the session count toward coverage."""
+    session = doc_reads(turn_calls(entries, session=True), cwd)
     gaps = {}
-    for path, ranges in seen.items():
+    for path in doc_reads(turn_calls(entries), cwd):
+        ranges = session[path]
         total = line_count(path)
         covered = set()
         for first, last in ranges:
