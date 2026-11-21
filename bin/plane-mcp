@@ -1,0 +1,6 @@
+#!/bin/sh
+# Token kept in a 600 file so it never lands in any agent's config.
+export PLANE_API_KEY="$(cat "$HOME/.config/plane-mcp/token")"
+export PLANE_WORKSPACE_SLUG=meizo-infotech-private-limited
+export PLANE_BASE_URL=https://plane.meizoerp.com
+exec /home/rehan/.local/bin/uvx plane-mcp-server stdio

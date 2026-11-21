@@ -1,6 +1,7 @@
 """PreToolUse on edits + Stop (Claude Code, Antigravity): a .md document opened
 this turn must be read in full before code is edited or the turn ends, or the
-reply must say "not read: <file> lines X-Y"."""
+reply must say "not read: <file> lines X-Y". Edits to the CLAUDE.md/GEMINI.md
+copies that sync.sh generates are denied."""
 import json
 import os
 import re
@@ -9,6 +10,10 @@ import sys
 
 DOC = (".md", ".markdown")
 CLAUDE_READ_DEFAULT = 2000
+# sync.sh overwrites these from ~/ai-setup/AGENTS.md, so an edit here is lost.
+GENERATED = tuple(os.path.expanduser(p) for p in (
+    "~/.claude/CLAUDE.md", "~/.gemini/GEMINI.md", "~/.antigravity-profile-2/.gemini/GEMINI.md"))
+PROBE_LINES = 5  # head -n 5 or less is a peek, not a read
 
 
 def unquote(value):
@@ -50,6 +55,8 @@ def shell_reads(command, cwd):
                     n = int(a[1:])
                 elif a == "-n" and i + 1 < len(args) and args[i + 1].lstrip("+").isdigit():
                     n = int(args[i + 1].lstrip("+"))
+            if cmd == "head" and n <= PROBE_LINES:
+                continue
             ranges = [(1, n)] if cmd == "head" else [(-n, None)]
         elif cmd == "sed" and "-n" in args:
             ranges = [(int(a), int(b or a)) for a, b in re.findall(r"(\d+)(?:,(\d+))?p", " ".join(args))]
@@ -167,12 +174,15 @@ def main():
             target = unquote((payload["toolCall"].get("args") or {}).get("Path"))
         else:
             target = str((payload.get("tool_input") or {}).get("file_path") or "")
-        if target.lower().endswith(DOC):
+        if os.path.normpath(target) in GENERATED:
+            reason = "This file is generated: edit ~/ai-setup/AGENTS.md, then run ./sync.sh."
+        elif target.lower().endswith(DOC) or target.startswith("/tmp/"):
             return
-        gaps = unread(entries, cwd)
-        if not gaps:
-            return
-        reason = f"Finish reading before editing code: {describe(gaps)}."
+        else:
+            gaps = unread(entries, cwd)
+            if not gaps:
+                return
+            reason = f"Finish reading before editing code: {describe(gaps)}."
         if "toolCall" in payload:
             json.dump({"decision": "deny", "reason": reason}, sys.stdout)
         else:
