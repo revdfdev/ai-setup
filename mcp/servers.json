@@ -10,9 +10,5 @@
   "engram": {
     "command": "engram",
     "args": ["mcp", "--tools=agent"]
-  },
-  "plane": {
-    "command": "@HOME@/.local/bin/plane-mcp",
-    "args": []
   }
 }
