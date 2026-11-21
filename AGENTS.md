@@ -71,7 +71,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Live code beats an approved plan: re-check the code before each step; if they disagree, stop and report.
 - Done = a named command and its result; otherwise say "not verified". A suspected cause is not a fact until a check proves it.
 - Commit messages end at the body; no trailers.
-- Persisted data (databases, environments): dry-run, show the diff, wait for "apply"; name the environment queried. Tracker items (Plane): write directly.
+- Persisted data (databases, environments): dry-run, show the diff, wait for "apply"; name the environment queried. Tracker items (Plane): write directly; this Plane server has no pages, project features or description_html, so a plan goes into work items.
 - Analysis: read code and docs; run builds and tests only when asked.
 - Agent setup (rules, hooks, skills, MCP servers): change it in ~/ai-setup, then run ./sync.sh.
 - Never touch uncommitted files you didn't change; other agents work in the same repos.
@@ -103,7 +103,8 @@ When managing, drafting, or sending emails:
 
 ## 7. Grounding and boundaries
 
-- Every claim about code, data or behaviour cites `file:line` or command output; anything else is labelled "assumption".
+- Every claim about code, data or behaviour cites `file:line` or command output from this turn; anything else is labelled "assumption". A compaction summary is memory: re-read the repo before describing it.
+- Offer a decision with its reasons and a recommendation; an option you assumed is labelled "assumption", never handed over for confirmation.
 - Before implementing, present:
   - **Problem / Proposal**: what is wrong, or what is being asked for.
   - **Cause / Solution**: why it happens (proven or "suspected") and the fix.

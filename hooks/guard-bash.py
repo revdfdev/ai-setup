@@ -14,6 +14,7 @@ DENY = [
     (r"--include=\*[^\s'\"]*(\s|$)", "Quote the glob: --include='*.go' (zsh expands it)."),
 ]
 ASK = [
+    (r"(?i)\b(cat|head|tail|less|sed|bat)\b[^;&|\n]*(credential|secret|\.env\b)", "Reads a secrets file."),
     (r"\bgit\b[^;&|\n]*\bpush\b", "Push needs your approval now."),
     (r"\bgit\b[^;&|\n]*\btag\s+(?!-l\b|--list\b)[^\s-]", "Tagging needs your approval now."),
     (r"\bgit\s+reset\s+--hard\b", "Discards uncommitted work."),
