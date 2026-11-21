@@ -70,6 +70,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 - Live code beats an approved plan: re-check the code before each step; if they disagree, stop and report.
 - Done = a named command and its result; otherwise say "not verified". A suspected cause is not a fact until a check proves it.
+- Commit messages end at the body; no trailers.
 - Persisted data: dry-run, show the diff, wait for "apply", per environment; name the environment queried.
 - Never touch uncommitted files you didn't change; other agents work in the same repos.
 - Commit locally per slice; push only when the whole feature is done and the user approves. Never commit credentials.

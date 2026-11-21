@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Read-only query against a production tenant database.
+# Usage: prod-mongo-ro <tenant-id> <file.js>
+# Reads the password from hrms-k8s/config-prod.yaml and never prints it; reads from a secondary.
+set -euo pipefail
+TENANT="${1:?tenant id, e.g. CMP-aM5ErPdI}"; JS="${2:?script file}"
+if grep -Eq '\.(insert|update|replace|delete|remove|drop|rename|bulkWrite|findOneAnd|createIndex)\w*\s*\(' "$JS"; then
+  echo "Refused: $JS writes to the database. This command is read-only." >&2; exit 2
+fi
+CFG="$HOME/code/hrms-project/hrms-k8s/config-prod.yaml"
+PW=$(grep -E '^\s*SERVICE_MONGODB_PASSWORD:' "$CFG" | sed -E 's/^[^:]+:\s*"?([^"]*)"?\s*$/\1/')
+kubectl -n mongodb-cluster exec -i mongodb-cluster-0 -c mongodb -- \
+  mongosh --quiet -u root -p "$PW" --authenticationDatabase admin \
+  "mongodb://localhost:27017/hrms_${TENANT}?readPreference=secondary" < "$JS"

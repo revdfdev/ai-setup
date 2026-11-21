@@ -10,6 +10,7 @@ EDIT_TOOLS = {"Edit", "Write", "NotebookEdit"}
 DOC_SUFFIXES = (".md", ".markdown")
 REPORTED = re.compile(r"(?i)\b(checks?|tests?|verified|verification|ran)\b[^\n]*[:`]")
 NOT_VERIFIED = re.compile(r"(?i)not verified")
+PROOF_CLAIM = re.compile(r"(?i)\b(proven|confirmed)\b")
 
 
 def blocks(entry):
@@ -64,6 +65,9 @@ def verdict(entries, last_message=None):
     steps, final_text = turn(entries)
     if last_message:
         final_text = last_message
+    if PROOF_CLAIM.search(final_text) and "run" not in steps:
+        return ("You called something proven or confirmed but ran no test or query "
+                "this turn. Call it suspected, or run the check that proves it.")
     edits = [i for i, step in enumerate(steps) if step == "edit"]
     if not edits or NOT_VERIFIED.search(final_text):
         return None

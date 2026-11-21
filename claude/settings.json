@@ -5,7 +5,10 @@
       "Bash(git push -f *)",
       "Bash(git commit --no-verify *)"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "auto",
+    "allow": [
+      "Bash(prod-mongo-ro:*)"
+    ]
   },
   "skillOverrides": {
     "anthropic-skills:built-in-browser": "user-invocable-only",

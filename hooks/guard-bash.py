@@ -10,6 +10,8 @@ FLAGS = r"(?:\s+--?[\w-]+(?:=\S+|\s+(?!-)\S+)?)*"
 DENY = [
     (r"--no-verify\b", "Do not skip git hooks."),
     (r"(?i)co-authored-by", "No Co-Authored-By trailers."),
+    (r"\btsc\b[^;&|\n]*--noEmit[^;&|\n]*-p\s+\.(\s|$)", "Type-check with -p tsconfig.app.json; -p . checks nothing in meizohrms."),
+    (r"--include=\*[^\s'\"]*(\s|$)", "Quote the glob: --include='*.go' (zsh expands it)."),
 ]
 ASK = [
     (r"\bgit\b[^;&|\n]*\bpush\b", "Push needs your approval now."),

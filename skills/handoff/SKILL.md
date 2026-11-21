@@ -61,6 +61,7 @@ Rules:
 - No length cap. Cover the full scope of the user's request, including what was
   asked but not done. Re-read the user's messages in this session to find it.
 - A claim without a source goes under **Unverified**, never elsewhere.
+- Label every data claim *history* (from logs or saved copies) or *comparison* (against a named file or the current record).
 - **Test status** has a row for every item that was built or fixed. Done means the
   user tested it manually; an e2e pass alone is "e2e passed, awaiting manual". Carry
   rows over from the previous handoff, updated, never dropped.
