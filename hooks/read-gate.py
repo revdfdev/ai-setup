@@ -55,7 +55,7 @@ def shell_reads(command, cwd):
                     n = int(a[1:])
                 elif a == "-n" and i + 1 < len(args) and args[i + 1].lstrip("+").isdigit():
                     n = int(args[i + 1].lstrip("+"))
-            if cmd == "head" and n <= PROBE_LINES:
+            if n <= PROBE_LINES:
                 continue
             ranges = [(1, n)] if cmd == "head" else [(-n, None)]
         elif cmd == "sed" and "-n" in args:
@@ -99,7 +99,10 @@ def doc_reads(calls, cwd):
     seen = {}
     for name, args in calls:
         reads = []
-        if name == "Read":
+        if name == "Write":
+            # The agent authored the whole file, so it has seen every line.
+            reads = [(str(args.get("file_path") or ""), 1, None)]
+        elif name == "Read":
             path = str(args.get("file_path") or "")
             first = int(args.get("offset") or 1)
             reads = [(path, first, first + int(args.get("limit") or CLAUDE_READ_DEFAULT) - 1)]

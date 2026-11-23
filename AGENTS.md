@@ -79,7 +79,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Never touch uncommitted files you didn't change; other agents work in the same repos.
 - Commit locally per slice; push only when the whole feature is done and the user approves. Never commit credentials.
 - The user is the only developer: work and commit directly on `main` in every repo. Never create feature, backup or other branches.
-- A verified decision the code can't show: `mem_save` it to engram (type `decision`, the repo as project; the HRMS workspace is pinned to `hrms`). Never record status or logs.
+- A verified decision the code can't show: `mem_save` it to engram (type `decision`; project = `project_name` in the repo's `.engram/config.json`, else `hrms` for the HRMS app). Never record status or logs.
 - Comments only for a non-obvious why. Reuse an existing helper or component before adding a new one.
 - Plain, short replies; answer first.
 
