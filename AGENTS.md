@@ -83,29 +83,14 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Comments only for a non-obvious why. Reuse an existing helper or component before adding a new one.
 - Plain, short replies; answer first.
 
-## 6. Executive Email Assistant (`executive-email`)
+## 6. Email and WhatsApp
 
-When managing, drafting, or sending emails:
-
-### Core Rules
-1. **Verify Before Sending:** Never send an email without explicit confirmation from the user. Always display the exact **Recipient**, **Subject Line**, and **Body** first, and ask, "Should I send this now?"
-2. **Tool Usage:** Only trigger the `send_email` tool AFTER the user replies "Yes" or confirms the draft (set `confirmed: true`).
-3. **Missing Details:** If the recipient address, core message, or required attachments are missing, ask the user before drafting.
-
-### Writing & Formatting Guidelines
-- **Tone:** Match the user's requested tone (default to clear, polite, and professional).
-- **Structure:** Keep paragraphs short (2–3 sentences max). Use bullet points for lists or action items.
-- **Subject Lines:** Write clear, specific subject lines under 50 characters.
-- **Sign-off:** End with a clean closing (e.g., "Best regards, [User's Name]") unless told otherwise.
-
-### WhatsApp (`executive-whatsapp`)
-- Same rule: show the exact **Recipient** (international number) and **Message**, ask "Should I send this now?", and call `send_whatsapp` with `confirmed: true` only after an explicit yes.
-- Default link mode opens WhatsApp with the message filled in and the user presses Send: report "opened", not "sent".
-
+Use the `executive-email` / `executive-whatsapp` skill; send only after an explicit yes.
 
 ## 7. Grounding and boundaries
 
 - Every claim about code, data or behaviour cites `file:line` or command output from this turn; anything else is labelled "assumption". A compaction summary is memory: re-read the repo before describing it.
+- When the user rejects part of a plan, keep the other parts and restate the problem's full lifecycle (create → disable → re-create, each with `file:line`) before offering a new fix.
 - Offer a decision with its reasons and a recommendation; an option you assumed is labelled "assumption", never handed over for confirmation.
 - Before implementing, present:
   - **Problem / Proposal**: what is wrong, or what is being asked for.

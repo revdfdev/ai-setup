@@ -16,7 +16,8 @@ next session checks before acting.
 2. **Collect facts with the script**, passing only the repos this task touched:
    `handoff-facts <repo> [<repo> ...]` (add `--since "<date>"` if the work started
    before today). Paste its output unchanged; never type commits or file lists yourself.
-3. **Write the file** `<repo>/handoffs/<YYYY-MM-DD>-<topic>.md` (root of the main repo the task touched):
+3. **Find stale decisions**: grep the touched repos' decision records (`.agents/memory/decisions/`, `docs/DECISIONS.md`, ADRs) for the feature's old wording; list each one this session made stale under **Not done / open**.
+4. **Write the file** `<repo>/handoffs/<YYYY-MM-DD>-<topic>.md` (root of the main repo the task touched):
 
 ```markdown
 # Handoff: <topic> (<date>)
