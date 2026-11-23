@@ -62,6 +62,8 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
+- Network streaming / bi-directional sessions: verify client-host loopback with a named test before declaring client-host interaction works.
+
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
@@ -71,7 +73,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Live code beats an approved plan: re-check the code before each step; if they disagree, stop and report.
 - Done = a named command and its result; otherwise say "not verified". A suspected cause is not a fact until a check proves it.
 - Commit messages end at the body; no trailers.
-- Persisted data (databases, environments): dry-run, show the diff, wait for "apply"; name the environment queried. Tracker items (Plane): write directly.
+- Persisted data (databases, environments): dry-run, show the diff, wait for "apply"; name the environment queried. Tracker items: write directly.
 - Analysis: read code and docs; run builds and tests only when asked.
 - Agent setup (rules, hooks, skills, MCP servers): change it in ~/ai-setup, then run ./sync.sh.
 - Never touch uncommitted files you didn't change; other agents work in the same repos.
