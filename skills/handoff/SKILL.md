@@ -16,7 +16,7 @@ next session checks before acting.
 2. **Collect facts with the script**, passing only the repos this task touched:
    `handoff-facts <repo> [<repo> ...]` (add `--since "<date>"` if the work started
    before today). Paste its output unchanged; never type commits or file lists yourself.
-3. **Write the file** `~/.local/share/ai-setup/handoffs/<YYYY-MM-DD>-<topic>.md`:
+3. **Write the file** `<repo>/handoffs/<YYYY-MM-DD>-<topic>.md` (root of the main repo the task touched):
 
 ```markdown
 # Handoff: <topic> (<date>)
@@ -70,4 +70,4 @@ Rules:
 - Quote the user for goals, decisions and rejections; don't paraphrase what they meant.
 - No secrets. Other agents' uncommitted files stay listed as the script prints them.
 - In chat, give only the file path and one line for the next session:
-  `Read ~/.local/share/ai-setup/handoffs/<file> and verify each item before acting.`
+  `Read <repo>/handoffs/<file> and verify each item before acting.`

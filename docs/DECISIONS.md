@@ -19,3 +19,4 @@
 - 2026-11-19: `grilling` restored (call-only) now that EGM is gone.
 - 2026-11-19: Synced claude.ai `anthropic-skills:*` set to `user-invocable-only` via `skillOverrides` in `claude/settings.json` (kept, but only by `/name`). Checked: a new `claude -p` session no longer lists them.
 - 2026-11-19: Antigravity (agy engine, also behind the VS Code extension) does honour `disable-model-invocation: true`; the 2026-11-16 note above is outdated. Checked: `agy -p` lists only its own agy-customizations, antigravity-guide, run-workflow, swarm as self-activatable.
+- 2026-11-23: Handoffs now go to `<repo>/handoffs/` in the main repo the task touched, not `~/.local/share/ai-setup/handoffs/` — user: the old place was one "where i cannot find it".

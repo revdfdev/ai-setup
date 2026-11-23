@@ -91,7 +91,7 @@ for home in "$HOME" "$HOME/.antigravity-profile-2"; do
 done
 
 # Command-line helpers (e.g. handoff-facts) into ~/.local/bin
-run mkdir -p "$HOME/.local/bin" "$HOME/.local/share/ai-setup/handoffs"
+run mkdir -p "$HOME/.local/bin"
 for b in "$REPO"/bin/*; do run cp "$b" "$HOME/.local/bin/$(basename "$b")"; done
 
 echo "synced from $REPO$([ $DRY = 1 ] && echo ' (dry run)')"
