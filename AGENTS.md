@@ -62,6 +62,8 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
+- Network streaming / bi-directional sessions: verify client-host loopback with a named test before declaring client-host interaction works.
+
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
@@ -71,13 +73,17 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Live code beats an approved plan: re-check the code before each step; if they disagree, stop and report.
 - Done = a named command and its result; otherwise say "not verified". A suspected cause is not a fact until a check proves it.
 - Commit messages end at the body; no trailers.
+<<<<<<< HEAD
 - Persisted data (databases, environments): dry-run, show the diff, wait for "apply"; name the environment queried.
+=======
+- Persisted data (databases, environments): dry-run, show the diff, wait for "apply"; name the environment queried. Tracker items: write directly.
+>>>>>>> 9409ab34fd9e11d9d884a7b2ab716dc1015fec70
 - Analysis: read code and docs; run builds and tests only when asked.
 - Agent setup (rules, hooks, skills, MCP servers): change it in ~/ai-setup, then run ./sync.sh.
 - Never touch uncommitted files you didn't change; other agents work in the same repos.
 - Commit locally per slice; push only when the whole feature is done and the user approves. Never commit credentials.
 - The user is the only developer: work and commit directly on `main` in every repo. Never create feature, backup or other branches.
-- A verified decision the code can't show: `mem_save` it to engram (type `decision`, the repo as project; the HRMS workspace is pinned to `hrms`). Never record status or logs.
+- A verified decision the code can't show: `mem_save` it to engram (type `decision`; project = `project_name` in the repo's `.engram/config.json`, else `hrms` for the HRMS app). Never record status or logs.
 - Comments only for a non-obvious why. Reuse an existing helper or component before adding a new one.
 - Plain, short replies; answer first.
 

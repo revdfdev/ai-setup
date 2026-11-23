@@ -37,6 +37,17 @@ ASK = [
 
 
 def decide(command):
+    if re.search(r"\bgit\s+commit\b", command):
+        try:
+            import subprocess
+            remote = subprocess.check_output(["git", "config", "--get", "remote.origin.url"], text=True, stderr=subprocess.DEVNULL).strip()
+            if "Meizo-Infotech-Pvt-Ltd" in remote:
+                email = subprocess.check_output(["git", "config", "--get", "user.email"], text=True, stderr=subprocess.DEVNULL).strip()
+                if "meizoinfotech.com" not in email:
+                    return "deny", f"Company repository requires work email (*@meizoinfotech.com), currently '{email}'."
+        except Exception:
+            pass
+
     for pattern, reason in DENY:
         if re.search(pattern, command):
             return "deny", reason
